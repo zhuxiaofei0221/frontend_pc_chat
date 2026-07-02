@@ -1,0 +1,4 @@
+export { default as AuthenticationLogin } from './login.vue';
+export { default as AuthenticationLoginExpiredModal } from './login-expired-modal.vue';
+export { default as AuthenticationRegister } from './register.vue';
+export type { AuthenticationProps } from './types';
