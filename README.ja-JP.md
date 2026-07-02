@@ -1,157 +1,161 @@
-<div align="center">
-  <a href="https://github.com/anncwb/vue-vben-admin">
-    <img alt="VbenAdmin Logo" width="215" src="https://unpkg.com/@vbenjs/static-source@0.1.7/source/logo-v1.webp">
-  </a>
-  <br>
-  <br>
+# Frontend PC Chat
 
-[![license](https://img.shields.io/github/license/anncwb/vue-vben-admin.svg)](LICENSE)
+Vue Vben Admin 5.x ベースのAIチャットアプリケーションフロントエンドプロジェクトです。
 
-  <h1>Vue Vben Admin</h1>
-</div>
+## プロジェクトアーキテクチャ
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=vbenjs_vue-vben-admin&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=vbenjs_vue-vben-admin) ![codeql](https://github.com/vbenjs/vue-vben-admin/actions/workflows/codeql.yml/badge.svg) ![build](https://github.com/vbenjs/vue-vben-admin/actions/workflows/build.yml/badge.svg) ![ci](https://github.com/vbenjs/vue-vben-admin/actions/workflows/ci.yml/badge.svg) ![deploy](https://github.com/vbenjs/vue-vben-admin/actions/workflows/deploy.yml/badge.svg)
+### 全体構成
 
-**日本語** | [English](./README.md) | [中文](./README.zh-CN.md)
+プロジェクトはMonorepoアーキテクチャを採用し、アプリケーション層、コアパッケージ層、内部ツール層の3層構造で構成されています。
 
-## 紹介
-
-Vue Vben Adminは、最新の`vue3`、`vite`、`TypeScript`などの主流技術を使用して開発された、無料でオープンソースの中・後端テンプレートです。すぐに使える中・後端のフロントエンドソリューションとして、学習の参考にもなります。
-
-## アップグレード通知
-
-これは最新バージョン `5.0` であり、以前のバージョンとは互換性がありません。新しいプロジェクトを開始する場合は、最新バージョンを使用することをお勧めします。古いバージョンを表示したい場合は、[v2ブランチ](https://github.com/vbenjs/vue-vben-admin/tree/v2)を使用してください。
-
-## 特徴
-
-- **最新技術スタック**：Vue 3やViteなどの最先端フロントエンド技術で開発
-- **TypeScript**：アプリケーション規模のJavaScriptのための言語
-- **テーマ**：複数のテーマカラーが利用可能で、カスタマイズオプションも豊富
-- **国際化**：完全な内蔵国際化サポート
-- **権限管理**：動的ルートベースの権限生成ソリューションを内蔵
-
-## プレビュー
-
-- [Vben Admin](https://vben.pro/) - フルバージョンの中国語サイト
-
-テストアカウント：vben/123456
-
-<div align="center">
-  <img alt="VbenAdmin Logo" width="100%" src="https://anncwb.github.io/anncwb/images/preview1.png">
-  <img alt="VbenAdmin Logo" width="100%" src="https://anncwb.github.io/anncwb/images/preview2.png">
-  <img alt="VbenAdmin Logo" width="100%" src="https://anncwb.github.io/anncwb/images/preview3.png">
-</div>
-
-### Gitpodを使用
-
-Gitpod（GitHub用の無料オンライン開発環境）でプロジェクトを開き、すぐにコーディングを開始します。
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/vbenjs/vue-vben-admin)
-
-## ドキュメント
-
-[ドキュメント](https://doc.vben.pro/)
-
-## インストールと使用
-
-1. プロジェクトコードを取得
-
-```bash
-git clone https://github.com/vbenjs/vue-vben-admin.git
+```
+frontend_pc_chat/
+├── apps/                    # アプリケーション層
+│   └── web-ele/             # メインアプリケーション
+├── packages/@core/          # コアパッケージ層
+└── internal/                # 内部ツール層
 ```
 
-2. 依存関係のインストール
+### アプリケーション層 (apps/web-ele)
+
+メインアプリケーションのディレクトリ構造：
+
+```
+apps/web-ele/src/
+├── adapter/                 # コンポーネントアダプタ（Element Plus アダプト）
+├── api/                     # APIリクエスト層
+│   ├── core/                # コアAPI（auth、chat、menu、user）
+│   └── request.ts           # リクエストクライアント設定
+├── layouts/                 # レイアウトコンポーネント（auth、basic）
+├── locales/                 # 国際化設定
+├── router/                  # ルーター設定
+│   ├── routes/              # ルート定義
+│   ├── access.ts            # アクセス制御
+│   └── guard.ts             # ルーターガード
+├── store/                   # ステート管理（auth）
+├── views/                   # ページビュー
+│   ├── _core/               # コアページ（ログイン、登録、エラーページ）
+│   ├── chat/                # チャットページ
+│   └── dashboard/           # ダッシュボードページ
+├── app.vue                  # ルートコンポーネント
+├── bootstrap.ts             # アプリケーションブートストラップ
+├── main.ts                  # エントリーファイル
+└── preferences.ts           # 設定
+```
+
+### コアパッケージ層 (packages/@core)
+
+再利用可能なコア機能を提供します：
+
+| パッケージ名 | 役割 |
+|------|------|
+| `base/design` | デザインシステム（CSS、デザイントークン、BEM） |
+| `base/icons` | アイコンコンポーネント（Lucide） |
+| `base/shared` | 共有ツール（キャッシュ、カラー、定数、ユーティリティ関数） |
+| `base/typings` | 型定義 |
+| `composables` | コンポーザブル関数（useIsMobile、useNamespace など） |
+| `preferences` | 設定管理 |
+| `ui-kit/form-ui` | フォームUIコンポーネント |
+| `ui-kit/layout-ui` | レイアウトUIコンポーネント |
+| `ui-kit/menu-ui` | メニューUIコンポーネント |
+| `ui-kit/popup-ui` | ポップアップUIコンポーネント（Alert、Drawer、Modal） |
+| `ui-kit/shadcn-ui` | shadcn-vue コンポーネントライブラリ |
+
+### 内部ツール層 (internal/)
+
+開発ツール設定：
+
+- `lint-configs/` - ESLint、Stylelint、Commitlint 設定
+- `node-utils/` - Node.js ユーティリティ関数
+- `tailwind-config/` - Tailwind CSS 設定
+- `tsconfig/` - TypeScript 設定
+- `vite-config/` - Vite 設定プラグイン
+
+## コア機能
+
+### チャットシステム
+
+コアチャット機能は4つのサブコンポーネントで構成されています：
+
+| コンポーネント | 役割 |
+|------|------|
+| `chat-conversation.vue` | 会話リストサイドバー、会話の作成・切り替え・削除を管理 |
+| `chat-editor.vue` | メッセージ入力エディタ、テキスト入力と送信をサポート |
+| `chat-render.vue` | メッセージリストレンダリング、Markdownレンダリングとスクロールをサポート |
+| `chat-welcome.vue` | ウェルカムページ、会話がない場合に表示 |
+
+主な機能：
+- SSEストリーミングメッセージ応答をサポート、タイプライター効果を実現
+- メッセージリストレンダリング（Markdownサポート）
+- 会話管理（作成、削除、切り替え）
+
+### ユーザー認証
+- ログイン/登録ページ
+- JWT Token管理
+- アクセス制御ルーターガード
+
+### ダッシュボード
+- データ可視化分析
+- アクセストレンド統計
+
+### インフラストラクチャ
+- **国際化**: 中英語対応
+- **テーマ**: 複数のテーマカラー設定
+- **レスポンシブ**: モバイル端末対応
+- **ステート管理**: Pinia
+- **ルーター**: Vue Router（Hash/Historyモード対応）
+
+## 技術スタック
+
+| 技術 | バージョン |
+|------|------|
+| Vue | 3.x |
+| Vite | 6.x |
+| TypeScript | 5.x |
+| Element Plus | 最新 |
+| Pinia | 最新 |
+| Vue Router | 4.x |
+| Tailwind CSS | 4.x |
+
+## データフロー
+
+```
+ユーザー操作 → Viewコンポーネント → API層 → バックエンドサービス
+                          ↓
+                     ステート管理 (Pinia)
+                          ↓
+                     ビュー更新
+```
+
+## 環境変数
+
+| 変数 | 説明 |
+|------|------|
+| `VITE_APP_TITLE` | アプリケーションタイトル |
+| `VITE_APP_NAMESPACE` | アプリケーションネームスペース、キャッシュとstoreのプレフィックス分離に使用 |
+| `VITE_APP_STORE_SECURE_KEY` | store永続化の暗号化キー |
+| `VITE_GLOB_API_URL` | APIエンドポイントアドレス |
+| `VITE_ROUTER_HISTORY` | ルーターモード（hash/history） |
+
+## 起動方法
 
 ```bash
-cd vue-vben-admin
-npm i -g corepack
+# 依存関係のインストール
 pnpm install
+
+# 開発モード（ルートディレクトリから）
+pnpm dev:ele
+
+# 本番ビルド
+pnpm build:ele
+
+# タイプチェック
+pnpm check:type
+
+# コードフォーマット
+pnpm format
 ```
-
-3. 実行
-
-```bash
-pnpm dev
-```
-
-4. ビルド
-
-```bash
-pnpm build
-```
-
-## 変更ログ
-
-[CHANGELOG](https://github.com/vbenjs/vue-vben-admin/releases)
-
-## 貢献方法
-
-ご参加をお待ちしております！[Issueを提出](https://github.com/anncwb/vue-vben-admin/issues/new/choose)するか、Pull Requestを送信してください。
-
-**Pull Request プロセス：**
-
-1. コードをフォーク
-2. 自分のブランチを作成：`git checkout -b feat/xxxx`
-3. 変更をコミット：`git commit -am 'feat(function): add xxxxx'`
-4. ブランチをプッシュ：`git push origin feat/xxxx`
-5. `pull request`を送信
-
-## Git貢献提出規則
-
-参考 [vue](https://github.com/vuejs/vue/blob/dev/.github/COMMIT_CONVENTION.md) 規則 ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular))
-
-- `feat` 新機能の追加
-- `fix` 問題/バグの修正
-- `style` コードスタイルに関連し、実行結果に影響しない
-- `perf` 最適化/パフォーマンス向上
-- `refactor` リファクタリング
-- `revert` 変更の取り消し
-- `test` テスト関連
-- `docs` ドキュメント/注釈
-- `chore` 依存関係の更新/スキャフォールディング設定の変更など
-- `ci` 継続的インテグレーション
-- `types` 型定義ファイルの変更
-
-## ブラウザサポート
-
-Tailwind CSS v4.0 is designed for Safari 16.4+, Chrome 111+, and Firefox 128+
-
-モダンブラウザをサポートし、IEはサポートしません
-
-| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
-| :-: | :-: | :-: | :-: |
-| 最新2バージョン | 最新2バージョン | 最新2バージョン | 最新2バージョン |
-
-## メンテナー
-
-[@Vben](https://github.com/anncwb)
-
-## スター歴史
-
-[![Star History Chart](https://api.star-history.com/svg?repos=vbenjs/vue-vben-admin&type=Date)](https://star-history.com/#vbenjs/vue-vben-admin&Date)
-
-## 寄付
-
-このプロジェクトが役に立つと思われた場合、作者にコーヒーを一杯おごってサポートを示すことができます！
-
-![donate](https://unpkg.com/@vbenjs/static-source@0.1.7/source/sponsor.png)
-
-<a style="display: block;width: 100px;height: 50px;line-height: 50px; color: #fff;text-align: center; background: #408aed;border-radius: 4px;" href="https://www.paypal.com/paypalme/cvvben">Paypal Me</a>
-
-## 貢献者
-
-<a href="https://openomy.app/github/vbenjs/vue-vben-admin" target="_blank" style="display: block; width: 100%;" align="center">
-  <img src="https://openomy.app/svg?repo=vbenjs/vue-vben-admin&chart=bubble&latestMonth=3" target="_blank" alt="Contribution Leaderboard" style="display: block; width: 100%;" />
- </a>
-
-<a href="https://github.com/vbenjs/vue-vben-admin/graphs/contributors">
-  <img alt="Contributors" src="https://contrib.rocks/image?repo=vbenjs/vue-vben-admin" />
-</a>
-
-## Discord
-
-- [Github Discussions](https://github.com/anncwb/vue-vben-admin/discussions)
 
 ## ライセンス
 
-[MIT © Vben-2020](./LICENSE)
+MIT
