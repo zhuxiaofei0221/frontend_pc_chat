@@ -48,7 +48,7 @@
     "vue": "catalog:",
     "vue-element-plus-x": "1.3.0",
     "vue-router": "catalog:",
-    "x-markdown-vue": "^0.0.200"
+    "x-markdown-vue": "^0.0.201"
   },
   "devDependencies": {
     "unplugin-element-plus": "catalog:"
